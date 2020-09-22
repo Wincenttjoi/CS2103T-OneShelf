@@ -63,7 +63,6 @@ public class MainWindow extends UiPart<Stage> {
         this.logic = logic;
 
         // Configure the UI
-//        setWindowDefaultSize(logic.getGuiSettings());
         setWindowDefaultSize(DEFAULT_HEIGHT, DEFAULT_WIDTH);
         primaryStage.setResizable(false);
         primaryStage.setTitle(TITLE);
