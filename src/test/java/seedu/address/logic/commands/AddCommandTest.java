@@ -16,7 +16,6 @@ import java.util.function.Predicate;
 import org.junit.jupiter.api.Test;
 
 import javafx.collections.ObservableList;
-import seedu.address.commons.core.GuiSettings;
 import seedu.address.model.InventoryBook;
 import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyInventoryBook;
@@ -96,6 +95,7 @@ public class AddCommandTest {
             throw new AssertionError("This method should not be called.");
         }
 
+        /**
         @Override
         public GuiSettings getGuiSettings() {
             throw new AssertionError("This method should not be called.");
@@ -105,6 +105,7 @@ public class AddCommandTest {
         public void setGuiSettings(GuiSettings guiSettings) {
             throw new AssertionError("This method should not be called.");
         }
+         **/
 
         @Override
         public Path getInventoryBookFilePath() {

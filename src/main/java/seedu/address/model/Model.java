@@ -4,7 +4,6 @@ import java.nio.file.Path;
 import java.util.function.Predicate;
 
 import javafx.collections.ObservableList;
-import seedu.address.commons.core.GuiSettings;
 import seedu.address.model.item.Item;
 
 /**
@@ -23,16 +22,6 @@ public interface Model {
      * Returns the user prefs.
      */
     ReadOnlyUserPrefs getUserPrefs();
-
-    /**
-     * Returns the user prefs' GUI settings.
-     */
-    GuiSettings getGuiSettings();
-
-    /**
-     * Sets the user prefs' GUI settings.
-     */
-    void setGuiSettings(GuiSettings guiSettings);
 
     /**
      * Returns the user prefs' inventory book file path.
