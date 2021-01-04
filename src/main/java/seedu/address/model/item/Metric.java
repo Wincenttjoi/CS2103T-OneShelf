@@ -9,9 +9,9 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
  */
 public class Metric {
 
-    public static final String MESSAGE_CONSTRAINTS = "Metric should be alphanumeric";
+    public static final String MESSAGE_CONSTRAINTS = "Metric should be alphabetical, and it should not be blank";
 
-    public static final String VALIDATION_REGEX = "\\p{Alnum}+";
+    public static final String VALIDATION_REGEX = "[\\p{L}][\\p{L} ]*";
 
     public final String value;
 

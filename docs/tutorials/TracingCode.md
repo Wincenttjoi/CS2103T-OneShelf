@@ -85,12 +85,12 @@ Recall from the User Guide that the `edit` command has the format: `edit INDEX [
         //Parse user input from String to a Command
         Command command = addressBookParser.parseCommand(commandText);
         //Executes the Command and stores the result
-        commandResult = command.execute(model);
+        commandResult = command.execute(inventoryModel);
 
         try {
-            //We can deduce that the previous line of code modifies model in some way
+            //We can deduce that the previous line of code modifies inventoryModel in some way
             // since it's being stored here.
-            storage.saveAddressBook(model.getAddressBook());
+            storage.saveAddressBook(inventoryModel.getAddressBook());
         } catch (IOException ioe) {
             throw new CommandException(FILE_OPS_ERROR_MESSAGE + ioe, ioe);
         }
@@ -150,20 +150,20 @@ Recall from the User Guide that the `edit` command has the format: `edit INDEX [
 
    ``` java
    @Override
-   public CommandResult execute(Model model) throws CommandException {
+   public CommandResult execute(Model inventoryModel) throws CommandException {
        ...
        Person itemToEdit = lastShownList.get(index.getZeroBased());
        Person editedItem = createEditedPerson(itemToEdit, editItemDescriptor);
-       if (!itemToEdit.isSamePerson(editedItem) && model.hasPerson(editedItem)) {
+       if (!itemToEdit.isSamePerson(editedItem) && inventoryModel.hasPerson(editedItem)) {
            throw new CommandException(MESSAGE_DUPLICATE_PERSON);
        }
-       model.setPerson(itemToEdit, editedItem);
-       model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+       inventoryModel.setPerson(itemToEdit, editedItem);
+       inventoryModel.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
        return new CommandResult(String.format(MESSAGE_EDIT_PERSON_SUCCESS, editedItem));
    }
    ```
 
-1. As suspected, `command#execute()` does indeed make changes to `model`.
+1. As suspected, `command#execute()` does indeed make changes to `inventoryModel`.
 
 1. We can a closer look at how storage works by repeatedly stepping into the code until we arrive at
     `JsonAddressBook#saveAddressBook()`.

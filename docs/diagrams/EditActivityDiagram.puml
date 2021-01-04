@@ -1,0 +1,21 @@
+@startuml
+start
+:User execute Item/Delivery EditCommand;
+
+if () then ([command is valid])
+	:Record changes to be made inside EditDescriptor;
+	:Instantiate new EditCommand with EditDescriptor;
+	:execute EditCommand;
+	if () then ([duplicates found])
+	:Throw an exception;
+	:Notify the user with corresponding error message through UI;
+	else ([else])
+	:Update UI with updated Item/Delivery list;
+	endif
+else ([else])
+	:Throw an exception;
+	:Notify the user with corresponding error message through UI;
+endif
+stop
+
+@enduml

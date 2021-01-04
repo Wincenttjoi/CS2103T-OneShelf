@@ -1,0 +1,15 @@
+{
+  "deliveries" : [ {
+    "name" : "ALEX YEOH",
+    "phone" : "87438807",
+    "address" : "Blk 30 Geylang Street 29, #06-40",
+    "order" : "2x Chicken Rice, 1x Ice Milo",
+    "endTime" : "28 October 2020 00:27:56"
+  }, {
+    "name" : "ALEX YEOH",
+    "phone" : "87438807",
+    "address" : "Blk 30 Geylang Street 29, #06-40",
+    "order" : "2x Chicken Rice, 1x Ice Milo",
+    "endTime" : "28 October 2020 00:27:56"
+  } ]
+}

@@ -2,13 +2,13 @@ package seedu.address.ui;
 
 import static seedu.address.commons.core.Messages.HELP_START;
 import static seedu.address.commons.core.Messages.HELP_SUMMARY;
+import static seedu.address.commons.core.Messages.MESSAGE_HELP_ON_START;
 
 import java.util.logging.Logger;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextInputControl;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
@@ -116,7 +116,7 @@ public class MainWindow extends UiPart<Stage> {
          * in CommandBox or ResultDisplay.
          */
         getRoot().addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-            if (event.getTarget() instanceof TextInputControl && keyCombination.match(event)) {
+            if (keyCombination.match(event)) {
                 menuItem.getOnAction().handle(new ActionEvent());
                 event.consume();
             }
@@ -127,16 +127,17 @@ public class MainWindow extends UiPart<Stage> {
      * Fills up all the placeholders of this window.
      */
     void fillInnerParts() {
-        itemListPanel = new ItemListPanel(logic.getFilteredItemList());
+        itemListPanel = new ItemListPanel(logic.getFilteredAndSortedItemList());
         itemListPanelPlaceholder.getChildren().add(itemListPanel.getRoot());
 
         resultDisplay = new ResultDisplay();
+        resultDisplay.setFeedbackToUser(MESSAGE_HELP_ON_START);
         resultDisplayPlaceholder.getChildren().add(resultDisplay.getRoot());
 
-        deliveryListPanel = new DeliveryListPanel(logic.getFilteredDeliveryList());
+        deliveryListPanel = new DeliveryListPanel(logic.getFilteredAndSortedDeliveryList());
         deliveryListPanelPlaceholder.getChildren().add(deliveryListPanel.getRoot());
 
-        StatusBarFooter statusBarFooter = new StatusBarFooter(logic.getInventoryBookFilePath());
+        StatusBarFooter statusBarFooter = new StatusBarFooter();
         statusbarPlaceholder.getChildren().add(statusBarFooter.getRoot());
 
         CommandBox commandBox = new CommandBox(this::executeCommand);

@@ -1,0 +1,13 @@
+{
+  "deliveries": [ {
+    "name": "Valid Delivery",
+    "phone": "94824243",
+    "address": "Blk 30 Geylang Street 29, #06-40",
+    "order": "2x Chicken Rice, 1x Ice Milo"
+  }, {
+    "name": "Delivery With Invalid Phone Field",
+    "phone": "948asdf2424",
+    "address": "Blk 30 Geylang Street 29, #06-40",
+    "order": "2x Chicken Rice, 1x Ice Milo"
+  } ]
+}

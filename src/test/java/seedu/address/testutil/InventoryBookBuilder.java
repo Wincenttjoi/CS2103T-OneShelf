@@ -1,6 +1,6 @@
 package seedu.address.testutil;
 
-import seedu.address.model.InventoryBook;
+import seedu.address.model.inventorymodel.InventoryBook;
 import seedu.address.model.item.Item;
 
 /**

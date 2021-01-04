@@ -1,0 +1,31 @@
+@startuml
+!include style.puml
+
+box UI UI_COLOR_T2
+participant ":CommandBox" as CommandBox UI_COLOR
+participant ":TextField" as TextField UI_COLOR
+end box
+
+box History HISTORY_COLOR_T1
+participant ":HistoryManager" as HistoryManager HISTORY_COLOR
+end box
+
+[-> CommandBox : handleHistoryNavigation(event)
+activate CommandBox
+
+CommandBox -> HistoryManager : previousCommand()
+activate HistoryManager
+
+HistoryManager --> CommandBox
+deactivate HistoryManager
+
+CommandBox -> TextField : setText(previousCommand)
+activate TextField
+
+TextField --> CommandBox
+deactivate TextField
+
+[<-- CommandBox
+deactivate CommandBox
+
+@enduml

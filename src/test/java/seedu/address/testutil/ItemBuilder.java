@@ -8,7 +8,7 @@ import seedu.address.model.item.Metric;
 import seedu.address.model.item.Name;
 import seedu.address.model.item.Quantity;
 import seedu.address.model.item.Supplier;
-import seedu.address.model.tag.Tag;
+import seedu.address.model.item.Tag;
 import seedu.address.model.util.SampleDataUtil;
 
 /**
@@ -37,7 +37,7 @@ public class ItemBuilder {
         supplier = new Supplier(DEFAULT_SUPPLIER);
         tags = new HashSet<>();
         maxQuantity = null;
-        metric = new Metric(DEFAULT_METRIC);
+        metric = null;
     }
 
     /**

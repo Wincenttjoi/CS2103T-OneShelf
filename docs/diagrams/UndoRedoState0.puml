@@ -6,15 +6,24 @@ skinparam ClassBorderColor #000000
 title Initial state
 
 package States {
-    class State1 as "__ab0:AddressBook__"
-    class State2 as "__ab1:AddressBook__"
-    class State3 as "__ab2:AddressBook__"
+    class InventoryState1 as "__ib0:InventoryBook__"
+    class DeliveryState1 as "__db0:DeliveryBook__"
+    class InventoryState2 as "__ib1:InventoryBook__"
+    class DeliveryState2 as "__db1:DeliveryBook__"
+    class InventoryState3 as "__ib2:InventoryBook__"
+    class DeliveryState3 as "__db2:DeliveryBook__"
+    class Pointer as "Current State" #FFFFF
 }
-State1 -[hidden]right-> State2
-State2 -[hidden]right-> State3
-hide State2
-hide State3
+InventoryState1 -[hidden]right-> InventoryState2
+InventoryState2 -[hidden]right-> InventoryState3
+hide InventoryState2
+hide InventoryState3
 
-class Pointer as "Current State" #FFFFF
-Pointer -up-> State1
+DeliveryState1 -[hidden]right-> DeliveryState2
+DeliveryState2 -[hidden]right-> DeliveryState3
+hide DeliveryState2
+hide DeliveryState3
+
+Pointer -up-> InventoryState1
+Pointer -down-> DeliveryState1
 @end

@@ -5,10 +5,11 @@
 
 <?import javafx.scene.control.Button?>
 
-<StackPane styleClass="stack-pane" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1">
-  <TextField fx:id="commandTextField" onAction="#handleCommandEntered" promptText="Enter command here..."/>
+<?import javafx.scene.layout.HBox?>
+<HBox styleClass="stack-pane" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1">
+  <TextField fx:id="commandTextField" onAction="#handleCommandEntered" promptText="Enter command here..." HBox.hgrow="ALWAYS"/>
   <Button fx:id="submitCommand" onAction="#handleCommandEntered"
           prefHeight="40" minHeight="40" layoutX="500" StackPane.alignment="CENTER_RIGHT">
     Send</Button>
-</StackPane>
+</HBox>
 

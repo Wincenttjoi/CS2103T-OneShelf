@@ -1,0 +1,8 @@
+{
+  "deliveries": [ {
+    "name": "Delivery with invalid name field: R@chel",
+    "phone": "99272758",
+    "address": "Blk 30 Lorong 3 Serangoon Gardens, #07-18",
+    "order" : "2x Duck Rice, 1x Ayutaka Green Tea"
+  } ]
+}

@@ -7,7 +7,7 @@ title: "Tutorial: Removing Fields"
 >
 > —  Antoine de Saint-Exupery
 
-When working on AddressBook, you will most likely find that some features and fields that are no longer necessary. In scenarios like this, you can consider refactoring the existing `Person` model to suit your use case.
+When working on AddressBook, you will most likely find that some features and fields that are no longer necessary. In scenarios like this, you can consider refactoring the existing `Person` inventoryModel to suit your use case.
 
 In this tutorial, we’ll do exactly just that and remove the `address` field from `Person`.
 
@@ -20,7 +20,7 @@ Fortunately, IntelliJ IDEA provides a robust refactoring tool that can identify 
 
 ### Assisted refactoring
 
-The `address` field in `Person` is actually an instance of the `seedu.address.model.item.Address` class. Since removing the `Address` class will break the application, we start by identifying `Address`'s usages. This allows us to see code that depends on `Address` to function properly and edit them on a case-by-case basis. Right-click the `Address` class and select `Refactor` \> `Safe Delete` through the menu.
+The `address` field in `Person` is actually an instance of the `seedu.address.inventoryModel.item.Address` class. Since removing the `Address` class will break the application, we start by identifying `Address`'s usages. This allows us to see code that depends on `Address` to function properly and edit them on a case-by-case basis. Right-click the `Address` class and select `Refactor` \> `Safe Delete` through the menu.
 
 ![Usages detected](../images/remove/UnsafeDelete.png)
 

@@ -6,7 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import seedu.address.commons.core.index.Index;
-import seedu.address.model.Model;
+import seedu.address.model.inventorymodel.InventoryModel;
 import seedu.address.model.item.Item;
 
 /**
@@ -35,21 +35,21 @@ public class TestUtil {
     /**
      * Returns the middle index of the item in the {@code model}'s item list.
      */
-    public static Index getMidIndex(Model model) {
-        return Index.fromOneBased(model.getFilteredItemList().size() / 2);
+    public static Index getMidIndex(InventoryModel inventoryModel) {
+        return Index.fromOneBased(inventoryModel.getFilteredAndSortedItemList().size() / 2);
     }
 
     /**
      * Returns the last index of the item in the {@code model}'s item list.
      */
-    public static Index getLastIndex(Model model) {
-        return Index.fromOneBased(model.getFilteredItemList().size());
+    public static Index getLastIndex(InventoryModel inventoryModel) {
+        return Index.fromOneBased(inventoryModel.getFilteredAndSortedItemList().size());
     }
 
     /**
      * Returns the item in the {@code model}'s item list at {@code index}.
      */
-    public static Item getItem(Model model, Index index) {
-        return model.getFilteredItemList().get(index.getZeroBased());
+    public static Item getItem(InventoryModel inventoryModel, Index index) {
+        return inventoryModel.getFilteredAndSortedItemList().get(index.getZeroBased());
     }
 }

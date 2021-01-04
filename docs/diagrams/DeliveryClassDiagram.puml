@@ -1,0 +1,21 @@
+@startuml
+!include style.puml
+skinparam arrowThickness 1.1
+skinparam arrowColor MODEL_COLOR
+skinparam classBackgroundColor MODEL_COLOR
+
+Package Delivery {
+Class Delivery
+Class DeliveryName
+Class Phone
+Class Address
+Class Order
+Class UniqueDeliveryList
+}
+
+UniqueDeliveryList o--> "*" Delivery
+Delivery *--> "1" DeliveryName
+Delivery *--> "1" Phone
+Delivery *--> "1" Address
+Delivery *--> "1" Order
+@enduml

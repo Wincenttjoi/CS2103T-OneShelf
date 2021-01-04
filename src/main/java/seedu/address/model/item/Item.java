@@ -8,8 +8,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
-import seedu.address.model.tag.Tag;
-
 /**
  * Represents a Item in the inventory book.
  * Guarantees: details are present and not null, field values are validated, immutable.
@@ -112,16 +110,21 @@ public class Item {
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
-        builder.append(getName())
-                .append(" Quantity: ")
+        builder.append("\nName: ")
+                .append(getName())
+                .append("\n")
+                .append("Quantity: ")
                 .append(getQuantity())
-                .append(" Supplier: ")
+                .append("\n")
+                .append("Supplier: ")
                 .append(getSupplier())
-                .append(" Tags: ");
-        getTags().forEach(builder::append);
+                .append("\n")
+                .append("Tags: ");
+        getTags().forEach(x -> builder.append(x).append(" "));
         if (maxQuantity.isPresent()) {
-            builder.append(" Max Quantity: ")
-                   .append(getMaxQuantity().get().value);
+            builder.append("\n")
+                    .append("Max Quantity: ")
+                    .append(getMaxQuantity().get().value);
         }
 
         return builder.toString();

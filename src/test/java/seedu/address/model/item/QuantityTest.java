@@ -34,7 +34,7 @@ public class QuantityTest {
         // valid Quantity numbers
         assertTrue(Quantity.isValidQuantity("1")); // exactly 1 numbers
         assertTrue(Quantity.isValidQuantity("93121534"));
-        assertTrue(Quantity.isValidQuantity("124293842033123")); // long Quantity numbers
+        assertTrue(Quantity.isValidQuantity("123456789")); // long Quantity numbers
     }
 }
 

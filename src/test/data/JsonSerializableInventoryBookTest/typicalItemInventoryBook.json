@@ -1,40 +1,42 @@
 {
   "_comment": "AddressBook save file which contains the same Item values as in TypicalItem#getTypicalAddressBook()",
-  "items" : [ {
-    "name" : "Chicken",
-    "quantity" : "12",
-    "supplier" : "Giant",
-    "tagged" : ["meat"]
-  }, {
-    "name" : "Duck",
-    "quantity" : "33",
-    "maxQuantity" : "500",
-    "supplier" : "Cold Storage",
-    "tagged" : ["meat"]
-  }, {
-    "name" : "Salmon",
-    "quantity" : "5",
-    "supplier" : "No Supplier",
-    "tagged" : ["fish"]
-  }, {
-    "name" : "Broccoli",
-    "quantity" : "3",
-    "supplier" : "Sheng Siong",
-    "tagged" : ["vegetable"]
-  }, {
-    "name" : "Crab",
-    "quantity" : "7",
-    "supplier" : "NTUC",
-    "tagged" : ["seafood"]
-  }, {
-    "name" : "Beef",
-    "quantity" : "41",
-    "supplier" : "Cold Storage",
-    "tagged" : ["meat"]
-  }, {
-    "name" : "Pork",
-    "quantity" : "2",
-    "supplier" : "Sheng Siong",
-    "tagged" : ["meat"]
-  } ]
+  "items" : [
+    {
+      "name" : "Duck",
+      "quantity" : "33",
+      "maxQuantity" : "500",
+      "supplier" : "Cold Storage",
+      "tagged" : ["meat"]
+    }, {
+      "name" : "Pork",
+      "quantity" : "2",
+      "supplier" : "Sheng Siong",
+      "tagged" : ["meat"]
+    }, {
+      "name" : "Broccoli",
+      "quantity" : "3",
+      "supplier" : "Sheng Siong",
+      "tagged" : ["vegetable"]
+    }, {
+      "name" : "Salmon",
+      "quantity" : "5",
+      "supplier" : "No Supplier",
+      "tagged" : ["fish"]
+    }, {
+      "name" : "Crab",
+      "quantity" : "7",
+      "supplier" : "NTUC",
+      "tagged" : ["seafood"]
+    }, {
+      "name" : "Chicken",
+      "quantity" : "12",
+      "supplier" : "Giant",
+      "tagged" : ["meat"]
+    },{
+      "name" : "Beef",
+      "quantity" : "41",
+      "supplier" : "No Supplier",
+      "tagged" : ["meat"]
+    }
+  ]
 }

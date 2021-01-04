@@ -1,0 +1,26 @@
+@startuml
+!include style.puml
+skinparam arrowThickness 1.1
+skinparam arrowColor LOGIC_COLOR
+skinparam classBackgroundColor LOGIC_COLOR
+
+Class "{abstract}\nCommand" as Command
+Class "{abstract}\nItemCommand" as ItemCommand
+Class "{abstract}\nDeliveryCommand" as DeliveryCommand
+Class DeliveryEditCommand
+Class ItemEditCommand
+Class EditDeliveryDescriptor
+Class EditItemDescriptor
+Class Index
+
+ItemCommand .up.|> Command
+DeliveryCommand .up|> Command
+ItemEditCommand .up|> ItemCommand
+DeliveryEditCommand .up|> DeliveryCommand
+
+DeliveryEditCommand o--> "1" EditDeliveryDescriptor
+ItemEditCommand o--> "1" EditItemDescriptor
+
+DeliveryEditCommand o--> "1" Index
+ItemEditCommand o--> "1" Index
+@enduml

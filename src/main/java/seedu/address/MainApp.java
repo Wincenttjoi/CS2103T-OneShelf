@@ -15,19 +15,25 @@ import seedu.address.commons.util.ConfigUtil;
 import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.Logic;
 import seedu.address.logic.LogicManager;
-import seedu.address.model.InventoryBook;
-import seedu.address.model.Model;
-import seedu.address.model.ModelManager;
-import seedu.address.model.ReadOnlyInventoryBook;
 import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.UserPrefs;
+import seedu.address.model.deliverymodel.DeliveryBook;
+import seedu.address.model.deliverymodel.DeliveryModel;
+import seedu.address.model.deliverymodel.DeliveryModelManager;
+import seedu.address.model.deliverymodel.ReadOnlyDeliveryBook;
+import seedu.address.model.inventorymodel.InventoryBook;
+import seedu.address.model.inventorymodel.InventoryModel;
+import seedu.address.model.inventorymodel.InventoryModelManager;
+import seedu.address.model.inventorymodel.ReadOnlyInventoryBook;
 import seedu.address.model.util.SampleDataUtil;
-import seedu.address.storage.InventoryBookStorage;
-import seedu.address.storage.JsonInventoryBookStorage;
 import seedu.address.storage.JsonUserPrefsStorage;
 import seedu.address.storage.Storage;
 import seedu.address.storage.StorageManager;
 import seedu.address.storage.UserPrefsStorage;
+import seedu.address.storage.delivery.DeliveryBookStorage;
+import seedu.address.storage.delivery.JsonDeliveryBookStorage;
+import seedu.address.storage.item.InventoryBookStorage;
+import seedu.address.storage.item.JsonInventoryBookStorage;
 import seedu.address.ui.Ui;
 import seedu.address.ui.UiManager;
 
@@ -36,19 +42,20 @@ import seedu.address.ui.UiManager;
  */
 public class MainApp extends Application {
 
-    public static final Version VERSION = new Version(0, 6, 0, true);
+    public static final Version VERSION = new Version(1, 4, 0, true);
 
     private static final Logger logger = LogsCenter.getLogger(MainApp.class);
 
     protected Ui ui;
     protected Logic logic;
     protected Storage storage;
-    protected Model model;
+    protected InventoryModel inventoryModel;
+    protected DeliveryModel deliveryModel;
     protected Config config;
 
     @Override
     public void init() throws Exception {
-        logger.info("=============================[ Initializing InventoryBook ]===========================");
+        logger.info("=============================[ Initializing OneShelf ]===========================");
         super.init();
 
         AppParameters appParameters = AppParameters.parse(getParameters());
@@ -57,23 +64,26 @@ public class MainApp extends Application {
         UserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(config.getUserPrefsFilePath());
         UserPrefs userPrefs = initPrefs(userPrefsStorage);
         InventoryBookStorage inventoryBookStorage = new JsonInventoryBookStorage(userPrefs.getInventoryBookFilePath());
-        storage = new StorageManager(inventoryBookStorage, userPrefsStorage);
+        DeliveryBookStorage deliveryBookStorage = new JsonDeliveryBookStorage(userPrefs.getDeliveryBookFilePath());
+        storage = new StorageManager(inventoryBookStorage, deliveryBookStorage, userPrefsStorage);
 
         initLogging(config);
 
-        model = initModelManager(storage, userPrefs);
+        inventoryModel = initInventoryModelManager(storage, userPrefs);
+        deliveryModel = initDeliveryModelManager(storage, userPrefs);
 
-        logic = new LogicManager(model, storage);
+        logic = new LogicManager(inventoryModel, deliveryModel, storage);
 
         ui = new UiManager(logic);
     }
 
     /**
-     * Returns a {@code ModelManager} with the data from {@code storage}'s inventory book and {@code userPrefs}. <br>
+     * Returns a {@code InventoryModelManager}
+     * with the data from {@code storage}'s inventory book and {@code userPrefs}. <br>
      * The data from the sample inventory book will be used instead if {@code storage}'s inventory book is not found,
      * or an empty inventory book will be used instead if errors occur when reading {@code storage}'s inventory book.
      */
-    private Model initModelManager(Storage storage, ReadOnlyUserPrefs userPrefs) {
+    private InventoryModel initInventoryModelManager(Storage storage, ReadOnlyUserPrefs userPrefs) {
         Optional<ReadOnlyInventoryBook> inventoryBookOptional;
         ReadOnlyInventoryBook initialData;
         try {
@@ -89,8 +99,33 @@ public class MainApp extends Application {
             logger.warning("Problem while reading from the file. Will be starting with an empty InventoryBook");
             initialData = new InventoryBook();
         }
+        logger.info("Initializing Inventory Book...");
+        return new InventoryModelManager(initialData, userPrefs);
+    }
 
-        return new ModelManager(initialData, userPrefs);
+    /**
+     * Returns a {@code DeliveryModel} with the data from {@code storage}'s delivery book and {@code userPrefs}. <br>
+     * The data from the sample delivery book will be used instead if {@code storage}'s delivery book is not found,
+     * or an empty delivery book will be used instead if errors occur when reading {@code storage}'s delivery book.
+     */
+    private DeliveryModel initDeliveryModelManager(Storage storage, ReadOnlyUserPrefs userPrefs) {
+        Optional<ReadOnlyDeliveryBook> deliveryBookOptional;
+        ReadOnlyDeliveryBook initialData;
+        try {
+            deliveryBookOptional = storage.readDeliveryBook();
+            if (!deliveryBookOptional.isPresent()) {
+                logger.info("Data file not found. Will be starting with a sample DeliveryBook");
+            }
+            initialData = deliveryBookOptional.orElseGet(SampleDataUtil::getSampleDeliveryBook);
+        } catch (DataConversionException e) {
+            logger.warning("Data file not in the correct format. Will be starting with an empty DeliveryBook");
+            initialData = new DeliveryBook();
+        } catch (IOException e) {
+            logger.warning("Problem while reading from the file. Will be starting with an empty DeliveryBook");
+            initialData = new DeliveryBook();
+        }
+        logger.info("Initializing Delivery Book...");
+        return new DeliveryModelManager(initialData, userPrefs);
     }
 
     private void initLogging(Config config) {
@@ -167,15 +202,15 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        logger.info("Starting InventoryBook " + MainApp.VERSION);
+        logger.info("Starting OneShelf " + MainApp.VERSION);
         ui.start(primaryStage);
     }
 
     @Override
     public void stop() {
-        logger.info("============================ [ Stopping Inventory Book ] =============================");
+        logger.info("============================ [ Stopping OneShelf ] =============================");
         try {
-            storage.saveUserPrefs(model.getUserPrefs());
+            storage.saveUserPrefs(inventoryModel.getUserPrefs());
         } catch (IOException e) {
             logger.severe("Failed to save preferences " + StringUtil.getDetails(e));
         }

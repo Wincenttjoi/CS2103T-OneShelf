@@ -14,14 +14,14 @@ public class HelpCommandResult extends CommandResult {
      * Constructs a {@code HelpCommandResult} with the specified {@code dataToUser}, {@code feedbackToUser}, and
      * {@code displayType}.
      * @param feedbackToUser feedback to user.
-     * @param showHelp whether it is showHelp.
+     * @param isShowHelp whether it is showHelp.
      * @param dataToUser data to show user.
      * @param popUpContent the content to show in UI.
      */
-    public HelpCommandResult(String feedbackToUser, boolean showHelp,
-                             boolean showPreview, boolean exit, String dataToUser,
+    public HelpCommandResult(String feedbackToUser, boolean isShowHelp,
+                             boolean isShowPreview, boolean exit, String dataToUser,
                              String popUpContent) {
-        super(feedbackToUser, showHelp, showPreview, exit);
+        super(feedbackToUser, isShowHelp, isShowPreview, exit);
         this.dataToUser = requireNonNull(dataToUser);
         this.popUpContent = requireNonNull(popUpContent);
     }

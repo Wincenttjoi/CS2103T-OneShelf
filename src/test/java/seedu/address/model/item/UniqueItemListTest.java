@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.model.item.exceptions.DuplicateItemException;
 import seedu.address.model.item.exceptions.ItemNotFoundException;
+import seedu.address.model.item.exceptions.OverflowQuantityException;
 import seedu.address.testutil.ItemBuilder;
 
 public class UniqueItemListTest {
@@ -172,7 +173,7 @@ public class UniqueItemListTest {
     }
 
     @Test
-    public void addOnExistingItem_existingItem_success() {
+    public void addOnExistingItem_existingItem_success() throws OverflowQuantityException {
         uniqueItemList.add(CHICKEN);
         uniqueItemList.addOnExistingItem(CHICKEN);
         Item item = new ItemBuilder().withQuantity("24").withSupplier("GIANT").withTags("meat").build();

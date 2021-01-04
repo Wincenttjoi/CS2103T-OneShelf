@@ -1,0 +1,20 @@
+@startuml
+start
+:User executes help command;
+
+:The parser parse the help command;
+
+if () then ([else])
+    :Show error message;
+else ([Start or summary command])
+    if () then ([Start command])
+        :isShowHelp overridden as true;
+        :UI MainWindow opens Help Start window;
+    else ([Summary command])
+        :isShowPreview overridden as true;
+        :UI MainWindow opens Help Summary window;
+    endif
+endif
+stop
+
+@enduml

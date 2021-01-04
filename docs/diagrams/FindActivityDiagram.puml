@@ -1,0 +1,18 @@
+@startuml
+
+start
+
+:User executes a Item/Delivery FindCommand;
+
+if () then ([command is valid])
+	:Instantiate a FindCommand with a corresponding predicate;
+	:Execute FindCommand;
+	:Update UI with filtered Item/Delivery list;
+else ([else])
+	:Throw an exception;
+	:Notify the user with corresponding error messages through UI;
+endif
+
+stop
+
+@enduml

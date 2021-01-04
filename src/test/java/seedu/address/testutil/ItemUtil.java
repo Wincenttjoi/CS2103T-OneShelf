@@ -7,10 +7,10 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import java.util.Set;
 
-import seedu.address.logic.commands.AddCommand;
-import seedu.address.logic.commands.EditCommand;
+import seedu.address.logic.commands.itemcommand.ItemAddCommand;
+import seedu.address.logic.commands.itemcommand.ItemEditCommand;
 import seedu.address.model.item.Item;
-import seedu.address.model.tag.Tag;
+import seedu.address.model.item.Tag;
 
 /**
  * A utility class for Item.
@@ -21,7 +21,7 @@ public class ItemUtil {
      * Returns an add command string for adding the {@code item}.
      */
     public static String getAddCommand(Item item) {
-        return AddCommand.COMMAND_WORD + " " + getItemDetails(item);
+        return ItemAddCommand.COMMAND_WORD + " " + getItemDetails(item);
     }
 
     /**
@@ -41,7 +41,7 @@ public class ItemUtil {
     /**
      * Returns the part of command string for the given {@code EditItemDescriptor}'s details.
      */
-    public static String getEditItemDescriptorDetails(EditCommand.EditItemDescriptor descriptor) {
+    public static String getEditItemDescriptorDetails(ItemEditCommand.EditItemDescriptor descriptor) {
         StringBuilder sb = new StringBuilder();
         descriptor.getName().ifPresent(name -> sb.append(PREFIX_NAME).append(name.fullName).append(" "));
         descriptor.getQuantity().ifPresent(quantity -> sb.append(PREFIX_QUANTITY).append(quantity.value).append(" "));

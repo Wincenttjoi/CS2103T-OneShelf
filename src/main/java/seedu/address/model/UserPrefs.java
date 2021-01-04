@@ -15,6 +15,7 @@ public class UserPrefs implements ReadOnlyUserPrefs {
 
     private GuiSettings guiSettings = new GuiSettings();
     private Path inventoryBookFilePath = Paths.get("data" , "inventorybook.json");
+    private Path deliveryBookFilePath = Paths.get("data", "deliverybook.json");
 
     /**
      * Creates a {@code UserPrefs} with default values.
@@ -36,6 +37,7 @@ public class UserPrefs implements ReadOnlyUserPrefs {
         requireNonNull(newUserPrefs);
         setGuiSettings(newUserPrefs.getGuiSettings());
         setInventoryBookFilePath(newUserPrefs.getInventoryBookFilePath());
+        setDeliveryBookFilePath(newUserPrefs.getDeliveryBookFilePath());
     }
 
     public GuiSettings getGuiSettings() {
@@ -56,6 +58,15 @@ public class UserPrefs implements ReadOnlyUserPrefs {
         this.inventoryBookFilePath = inventoryBookFilePath;
     }
 
+    public Path getDeliveryBookFilePath() {
+        return deliveryBookFilePath;
+    }
+
+    public void setDeliveryBookFilePath(Path deliveryBookFilePath) {
+        requireNonNull(deliveryBookFilePath);
+        this.deliveryBookFilePath = deliveryBookFilePath;
+    }
+
     @Override
     public boolean equals(Object other) {
         if (other == this) {
@@ -68,19 +79,21 @@ public class UserPrefs implements ReadOnlyUserPrefs {
         UserPrefs o = (UserPrefs) other;
 
         return guiSettings.equals(o.guiSettings)
-                && inventoryBookFilePath.equals(o.inventoryBookFilePath);
+                && inventoryBookFilePath.equals(o.inventoryBookFilePath)
+                && deliveryBookFilePath.equals(o.deliveryBookFilePath);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(guiSettings, inventoryBookFilePath);
+        return Objects.hash(guiSettings, inventoryBookFilePath, deliveryBookFilePath);
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Gui Settings : " + guiSettings);
-        sb.append("\nLocal data file location : " + inventoryBookFilePath);
+        sb.append("\nInventory data file location : " + inventoryBookFilePath);
+        sb.append("\nDelivery data file location : " + deliveryBookFilePath);
         return sb.toString();
     }
 

@@ -25,7 +25,7 @@ For now, let’s keep `RemarkCommand` as simple as possible and print some outpu
 ``` java
 package seedu.address.logic.commands;
 
-import seedu.address.model.Model;
+import seedu.address.model.ItemModelodel;
 
 /**
  * Changes the remark of an existing item in the address book.
@@ -35,7 +35,7 @@ public class RemarkCommand extends Command {
     public static final String COMMAND_WORD = "remark";
 
     @Override
-    public CommandResult execute(Model model) {
+    public CommandResult execute(Model inventoryModel) {
         return new CommandResult("Hello from remark");
     }
 }
@@ -75,7 +75,7 @@ Following the convention in other commands, we add relevant messages as constant
     public static final String MESSAGE_NOT_IMPLEMENTED_YET = "Remark command not implemented yet";
 
     @Override
-    public CommandResult execute(Model model) throws CommandException {
+    public CommandResult execute(Model inventoryModel) throws CommandException {
         throw new CommandException(MESSAGE_NOT_IMPLEMENTED_YET);
     }
 ```
@@ -109,7 +109,7 @@ public class RemarkCommand extends Command {
         this.remark = remark;
     }
     @Override
-    public CommandResult execute(Model model) throws CommandException {
+    public CommandResult execute(Model inventoryModel) throws CommandException {
         throw new CommandException(String.format(MESSAGE_ARGUMENTS, index.getOneBased(), remark));
     }
 
@@ -220,13 +220,13 @@ public RemarkCommand parse(String args) throws ParseException {
 If you are stuck, check out the sample
 [here](https://github.com/se-edu/addressbook-level3/commit/dc6d5139d08f6403da0ec624ea32bd79a2ae0cbf#diff-fc19ecee89c3732a62fbc8c840250508).
 
-## Add `Remark` to the model
+## Add `Remark` to the inventoryModel
 
-Now that we have all the information that we need, let’s lay the groundwork for propagating the remarks added into the in-memory storage of item data. We achieve that by working with the `Person` model. Each field in a Person is implemented as a separate class (e.g. a `Name` object represents the item’s name). That means we should add a `Remark` class so that we can use a `Remark` object to represent a remark given to a item.
+Now that we have all the information that we need, let’s lay the groundwork for propagating the remarks added into the in-memory storage of item data. We achieve that by working with the `Person` inventoryModel. Each field in a Person is implemented as a separate class (e.g. a `Name` object represents the item’s name). That means we should add a `Remark` class so that we can use a `Remark` object to represent a remark given to a item.
 
 ### Add a new `Remark` class
 
-Create a new `Remark` in `seedu.address.model.item`. Since a `Remark` is a field that is similar to `Address`, we can reuse a significant bit of code.
+Create a new `Remark` in `seedu.address.inventoryModel.item`. Since a `Remark` is a field that is similar to `Address`, we can reuse a significant bit of code.
 
 A copy-paste and search-replace later, you should have something like [this](https://github.com/se-edu/addressbook-level3/commit/4516e099699baa9e2d51801bd26f016d812dedcc#diff-af2f075d24dfcd333876f0fbce321f25). Note how `Remark` has no constrains and thus does not require input
 validation.
@@ -333,8 +333,8 @@ save it with `Model#setPerson()`.
     public static final String MESSAGE_DELETE_REMARK_SUCCESS = "Removed remark from Person: %1$s";
 //...
     @Override
-    public CommandResult execute(Model model) throws CommandException {
-        List<Person> lastShownList = model.getFilteredPersonList();
+    public CommandResult execute(Model inventoryModel) throws CommandException {
+        List<Person> lastShownList = inventoryModel.getFilteredPersonList();
 
         if (index.getZeroBased() >= lastShownList.size()) {
             throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
@@ -344,8 +344,8 @@ save it with `Model#setPerson()`.
         Person editedItem = new Person(itemToEdit.getName(), itemToEdit.getPhone(), itemToEdit.getEmail(),
                 itemToEdit.getAddress(), remark, itemToEdit.getTags());
 
-        model.setPerson(itemToEdit, editedItem);
-        model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+        inventoryModel.setPerson(itemToEdit, editedItem);
+        inventoryModel.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
 
         return new CommandResult(generateSuccessMessage(editedItem));
     }

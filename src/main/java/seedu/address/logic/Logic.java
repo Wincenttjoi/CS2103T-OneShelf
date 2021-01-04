@@ -7,8 +7,11 @@ import seedu.address.commons.core.GuiSettings;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.commands.results.CommandResult;
 import seedu.address.logic.parser.exceptions.ParseException;
-import seedu.address.model.ReadOnlyInventoryBook;
 import seedu.address.model.delivery.Delivery;
+import seedu.address.model.deliverymodel.DeliveryModel;
+import seedu.address.model.deliverymodel.ReadOnlyDeliveryBook;
+import seedu.address.model.inventorymodel.InventoryModel;
+import seedu.address.model.inventorymodel.ReadOnlyInventoryBook;
 import seedu.address.model.item.Item;
 
 /**
@@ -27,20 +30,34 @@ public interface Logic {
     /**
      * Returns the InventoryBook.
      *
-     * @see seedu.address.model.Model#getInventoryBook()
+     * @see InventoryModel#getInventoryBook()
      */
     ReadOnlyInventoryBook getInventoryBook();
 
     /** Returns an unmodifiable view of the filtered list of items */
-    ObservableList<Item> getFilteredItemList();
-
-    /** Returns an unmodifiable view of the filtered list of deliveries */
-    ObservableList<Delivery> getFilteredDeliveryList();
+    ObservableList<Item> getFilteredAndSortedItemList();
 
     /**
      * Returns the user prefs' inventory book file path.
      */
     Path getInventoryBookFilePath();
+
+    /**
+     * Returns the DeliveryBook
+     * @see DeliveryModel#getDeliveryBook()
+     */
+    ReadOnlyDeliveryBook getDeliveryBook();
+
+    /**
+     * returns an unmodifiable view of the filtered list of deliveries
+     */
+    ObservableList<Delivery> getFilteredAndSortedDeliveryList();
+
+    /**
+     * Returns the user prefs' delivery book file path.
+     * @return
+     */
+    Path getDeliveryBookFilePath();
 
     /**
      * Returns the user prefs' GUI settings.

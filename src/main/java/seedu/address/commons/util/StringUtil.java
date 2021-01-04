@@ -39,6 +39,26 @@ public class StringUtil {
     }
 
     /**
+     * Returns true if the {@code sentence} contains the {@code test}.
+     *   Ignores case, but a full word match is required.
+     *   <br>examples:<pre>
+     *       containsStringIgnoreCase("ABc def", "abc") == true
+     *       containsStringIgnoreCase("ABc def", "DEF") == true
+     *       containsStringIgnoreCase("ABc def", "AB") == true
+     *       </pre>
+     * @param sentence cannot be null
+     * @param test cannot be null, cannot be empty, must be a single word
+     */
+    public static boolean containsStringIgnoreCase(String sentence, String test) {
+        requireNonNull(sentence);
+        requireNonNull(test);
+
+        String preppedWord = test.trim();
+
+        return sentence.toLowerCase().contains(preppedWord.toLowerCase());
+    }
+
+    /**
      * Returns a detailed message of the t, including the stack trace.
      */
     public static String getDetails(Throwable t) {
@@ -64,5 +84,22 @@ public class StringUtil {
         } catch (NumberFormatException nfe) {
             return false;
         }
+    }
+
+    /**
+     * Returns true if {@code s} represents an integer
+     * @param s String to test if integer
+     * @return true if s is an integer, false otherwise
+     */
+    public static boolean isInteger(String s) {
+        if (s == null) {
+            return false;
+        }
+        try {
+            int i = Integer.parseInt(s);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
     }
 }

@@ -1,0 +1,9 @@
+{
+  "deliveries": [ {
+    "name": "Delivery with invalid name field: R@chel",
+    "phone": "asd99272758",
+    "address": "Blk 30 Lorong 3 Serangoon Gardens, #07-18",
+    "order" : " ",
+    "endTime" : "28 October 2020 00:27:56"
+  } ]
+}

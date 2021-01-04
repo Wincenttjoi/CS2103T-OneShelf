@@ -1,0 +1,31 @@
+@startuml
+!include style.puml
+skinparam arrowThickness 1.1
+skinparam arrowColor MODEL_COLOR
+skinparam classBackgroundColor MODEL_COLOR
+
+Package Item {
+Class Item
+Class Supplier
+Class MaxQuantity
+Class Name
+Class Metric
+Class Quantity
+Class UniqueItemList
+Class Tag
+}
+
+UniqueItemList o--> "*" Item
+Item *--> "1" Name
+Item *--> "1" Quantity
+Item *--> "0..1" Supplier
+Item *--> "0..1"MaxQuantity
+Item *--> "*" Tag
+Item *--> "0..1" Metric
+
+Name -[hidden]right-> Quantity
+Quantity -[hidden]right-> Supplier
+Supplier -[hidden]right-> MaxQuantity
+MaxQuantity -[hidden]right-> Metric
+
+@enduml

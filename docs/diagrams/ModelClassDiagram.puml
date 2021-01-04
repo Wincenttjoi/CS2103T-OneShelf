@@ -5,52 +5,58 @@ skinparam arrowColor MODEL_COLOR
 skinparam classBackgroundColor MODEL_COLOR
 
 Package Model <<Rectangle>>{
-Interface ReadOnlyAddressBook <<Interface>>
+Interface ReadOnlyInventoryBook <<Interface>>
+Interface ReadOnlyDeliveryBook <<Interface>>
+Interface Models <<Interface>>
 Interface Model <<Interface>>
 Interface ObservableList <<Interface>>
-Class AddressBook
-Class ReadOnlyAddressBook
-Class Model
-Class ModelManager
+Interface ReadOnlyUserPrefs <<Interface>>
+Interface DeliveryModel <<Interface>>
+Interface InventoryModel <<Interface>>
+Class InventoryBook
+Class DeliveryBook
+Class ReadOnlyInventoryBook
+Class ReadOnlyDeliveryBook
+Class Models
+Class ModelManagers
 Class UserPrefs
-Class ReadOnlyUserPrefs
-
-Package Person {
-Class Person
-Class Address
-Class Email
-Class Name
-Class Phone
-Class UniquePersonList
-}
-
-Package Tag {
-Class Tag
-}
+Class DeliveryModelManager
+Class InventoryModelManager
+Class ItemComparator
+Class UniqueItemList
+Class UniqueDeliveryList
+Class Item
+Class Delivery
 }
 
 Class HiddenOutside #FFFFFF
-HiddenOutside ..> Model
+HiddenOutside ..> Models
 
-AddressBook .up.|> ReadOnlyAddressBook
+DeliveryBook .up.|> ReadOnlyDeliveryBook
+InventoryBook .up.|> ReadOnlyInventoryBook
 
-ModelManager .up.|> Model
-Model .right.> ObservableList
-ModelManager o--> "1" AddressBook
-ModelManager o-left-> "1" UserPrefs
+ModelManagers .up.|> Models
+ModelManagers o-down--> "1" InventoryModel
+ModelManagers o-down--> "1" DeliveryModel
+InventoryModelManager .up.|>InventoryModel
+DeliveryModelManager .up.|>DeliveryModel
+InventoryModel .up.|>Model
+DeliveryModel .up.|>Model
+InventoryModel .up.|>ObservableList
+DeliveryModel .up.|>ObservableList
+InventoryModelManager o-right-> "1..20" InventoryBook
+DeliveryModelManager o-left-> "1..20" DeliveryBook
+InventoryModelManager o-left-> "1" UserPrefs
+DeliveryModelManager o-right-> "1" UserPrefs
 UserPrefs .up.|> ReadOnlyUserPrefs
 
-AddressBook *--> "1" UniquePersonList
-UniquePersonList o--> "*" Person
-Person *--> Name
-Person *--> Phone
-Person *--> Email
-Person *--> Address
-Person *--> "*" Tag
+InventoryModel o-right-> "1" ItemComparator
 
-Name -[hidden]right-> Phone
-Phone -[hidden]right-> Address
-Address -[hidden]right-> Email
+InventoryModelManager o-->"1" Item : filtered and sorted list
+DeliveryModelManager o-->"1" Delivery : filtered list
 
-ModelManager -->"1" Person : filtered list
+InventoryBook o--> "1" UniqueItemList
+DeliveryBook o--> "1" UniqueDeliveryList
+UniqueDeliveryList o--> "*" Delivery
+UniqueItemList o--> "*" Item
 @enduml

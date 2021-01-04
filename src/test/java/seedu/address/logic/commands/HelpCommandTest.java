@@ -8,22 +8,22 @@ import org.junit.jupiter.api.Test;
 import seedu.address.logic.commands.help.HelpStartCommand;
 import seedu.address.logic.commands.help.HelpSummaryCommand;
 import seedu.address.logic.commands.results.CommandResult;
-import seedu.address.model.Model;
-import seedu.address.model.ModelManager;
+import seedu.address.model.inventorymodel.InventoryModel;
+import seedu.address.model.inventorymodel.InventoryModelManager;
 
 public class HelpCommandTest {
-    private Model model = new ModelManager();
-    private Model expectedModel = new ModelManager();
+    private InventoryModel inventoryModel = new InventoryModelManager();
+    private InventoryModel expectedInventoryModel = new InventoryModelManager();
 
     @Test
     public void execute_helpStart_success() {
         CommandResult expectedCommandResult = new CommandResult(SHOWING_HELP_MESSAGE, true, false, false);
-        assertCommandSuccess(new HelpStartCommand(), model, expectedCommandResult, expectedModel);
+        assertCommandSuccess(new HelpStartCommand(), inventoryModel, expectedCommandResult, expectedInventoryModel);
     }
 
     @Test
     public void execute_helpSummary_success() {
         CommandResult expectedCommandResult = new CommandResult(SHOWING_HELP_MESSAGE, false, true, false);
-        assertCommandSuccess(new HelpSummaryCommand(), model, expectedCommandResult, expectedModel);
+        assertCommandSuccess(new HelpSummaryCommand(), inventoryModel, expectedCommandResult, expectedInventoryModel);
     }
 }

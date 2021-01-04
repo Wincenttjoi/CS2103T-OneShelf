@@ -11,9 +11,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import seedu.address.commons.core.GuiSettings;
-import seedu.address.model.InventoryBook;
-import seedu.address.model.ReadOnlyInventoryBook;
 import seedu.address.model.UserPrefs;
+import seedu.address.model.inventorymodel.InventoryBook;
+import seedu.address.model.inventorymodel.ReadOnlyInventoryBook;
+import seedu.address.storage.delivery.JsonDeliveryBookStorage;
+import seedu.address.storage.item.JsonInventoryBookStorage;
 
 public class StorageManagerTest {
 
@@ -25,8 +27,9 @@ public class StorageManagerTest {
     @BeforeEach
     public void setUp() {
         JsonInventoryBookStorage inventoryBookStorage = new JsonInventoryBookStorage(getTempFilePath("ab"));
+        JsonDeliveryBookStorage deliveryBookStorage = new JsonDeliveryBookStorage(getTempFilePath("db"));
         JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(getTempFilePath("prefs"));
-        storageManager = new StorageManager(inventoryBookStorage, userPrefsStorage);
+        storageManager = new StorageManager(inventoryBookStorage, deliveryBookStorage, userPrefsStorage);
     }
 
     private Path getTempFilePath(String fileName) {

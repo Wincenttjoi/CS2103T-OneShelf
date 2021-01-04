@@ -1,5 +1,6 @@
 @startuml
 !include style.puml
+skinparam BoxPadding 8
 
 box Logic LOGIC_COLOR_T1
 participant ":LogicManager" as LogicManager LOGIC_COLOR
@@ -8,9 +9,13 @@ participant "u:UndoCommand" as UndoCommand LOGIC_COLOR
 end box
 
 box Model MODEL_COLOR_T1
-participant ":Model" as Model MODEL_COLOR
-participant ":VersionedAddressBook" as VersionedAddressBook MODEL_COLOR
+participant ":ModelsManager" as Models MODEL_COLOR
+participant ":InventoryModelManager" as InventoryModel MODEL_COLOR
+participant ":InventoryBook" as InventoryBook MODEL_COLOR
+participant ":DeliveryModelManager" as DeliveryModel MODEL_COLOR
+participant ":DeliveryBook" as DeliveryBook MODEL_COLOR
 end box
+
 [-> LogicManager : execute(undo)
 activate LogicManager
 
@@ -27,21 +32,38 @@ deactivate UndoCommand
 AddressBookParser --> LogicManager : u
 deactivate AddressBookParser
 
-LogicManager -> UndoCommand : execute()
+LogicManager -> UndoCommand : execute(Models)
 activate UndoCommand
 
-UndoCommand -> Model : undoAddressBook()
-activate Model
+UndoCommand -> Models : undo()
+activate Models
 
-Model -> VersionedAddressBook : undo()
-activate VersionedAddressBook
+Models -> InventoryModel : undo()
+activate InventoryModel
 
-VersionedAddressBook -> VersionedAddressBook :resetData(ReadOnlyAddressBook)
-VersionedAddressBook --> Model :
-deactivate VersionedAddressBook
+InventoryModel -> InventoryBook :resetData(ReadOnlyInventoryBook)
+activate InventoryBook
 
-Model --> UndoCommand
-deactivate Model
+InventoryBook -> InventoryModel
+deactivate InventoryBook
+
+InventoryModel -> Models
+deactivate InventoryModel
+
+Models -> DeliveryModel : undo()
+activate DeliveryModel
+
+DeliveryModel -> DeliveryBook :resetData(ReadOnlyDeliveryBook)
+activate DeliveryBook
+
+DeliveryBook -> DeliveryModel
+deactivate DeliveryBook
+
+DeliveryModel -> Models
+deactivate DeliveryModel
+
+Models --> UndoCommand
+deactivate Models
 
 UndoCommand --> LogicManager : result
 deactivate UndoCommand
@@ -50,4 +72,5 @@ destroy UndoCommand
 
 [<--LogicManager
 deactivate LogicManager
-@enduml
+
+@end

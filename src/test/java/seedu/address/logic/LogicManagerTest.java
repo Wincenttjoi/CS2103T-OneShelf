@@ -20,19 +20,22 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-import seedu.address.logic.commands.AddCommand;
-import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
+import seedu.address.logic.commands.itemcommand.ItemAddCommand;
+import seedu.address.logic.commands.itemcommand.ItemListCommand;
 import seedu.address.logic.commands.results.CommandResult;
 import seedu.address.logic.parser.exceptions.ParseException;
-import seedu.address.model.Model;
-import seedu.address.model.ModelManager;
-import seedu.address.model.ReadOnlyInventoryBook;
 import seedu.address.model.UserPrefs;
+import seedu.address.model.deliverymodel.DeliveryModel;
+import seedu.address.model.deliverymodel.DeliveryModelManager;
+import seedu.address.model.inventorymodel.InventoryModel;
+import seedu.address.model.inventorymodel.InventoryModelManager;
+import seedu.address.model.inventorymodel.ReadOnlyInventoryBook;
 import seedu.address.model.item.Item;
-import seedu.address.storage.JsonInventoryBookStorage;
 import seedu.address.storage.JsonUserPrefsStorage;
 import seedu.address.storage.StorageManager;
+import seedu.address.storage.delivery.JsonDeliveryBookStorage;
+import seedu.address.storage.item.JsonInventoryBookStorage;
 import seedu.address.testutil.ItemBuilder;
 
 public class LogicManagerTest {
@@ -41,16 +44,19 @@ public class LogicManagerTest {
     @TempDir
     public Path temporaryFolder;
 
-    private Model model = new ModelManager();
+    private InventoryModel inventoryModel = new InventoryModelManager();
+    private DeliveryModel deliveryModel = new DeliveryModelManager();
     private Logic logic;
 
     @BeforeEach
     public void setUp() {
         JsonInventoryBookStorage inventoryBookStorage =
                 new JsonInventoryBookStorage(temporaryFolder.resolve("inventoryBook.json"));
+        JsonDeliveryBookStorage deliveryBookStorage =
+                new JsonDeliveryBookStorage(temporaryFolder.resolve("deliveryBook.json"));
         JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(temporaryFolder.resolve("userPrefs.json"));
-        StorageManager storage = new StorageManager(inventoryBookStorage, userPrefsStorage);
-        logic = new LogicManager(model, storage);
+        StorageManager storage = new StorageManager(inventoryBookStorage, deliveryBookStorage, userPrefsStorage);
+        logic = new LogicManager(inventoryModel, deliveryModel, storage);
     }
 
     @Test
@@ -61,14 +67,14 @@ public class LogicManagerTest {
 
     @Test
     public void execute_commandExecutionError_throwsCommandException() {
-        String deleteCommand = "delete 9";
+        String deleteCommand = "delete-i 9";
         assertCommandException(deleteCommand, MESSAGE_INVALID_ITEM_DISPLAYED_INDEX);
     }
 
     @Test
     public void execute_validCommand_success() throws Exception {
-        String listCommand = ListCommand.COMMAND_WORD;
-        assertCommandSuccess(listCommand, ListCommand.MESSAGE_SUCCESS, model);
+        String listCommand = ItemListCommand.COMMAND_WORD;
+        assertCommandSuccess(listCommand, ItemListCommand.MESSAGE_SUCCESS, inventoryModel);
     }
 
     @Test
@@ -77,19 +83,21 @@ public class LogicManagerTest {
         JsonInventoryBookStorage inventoryBookStorage =
             new JsonInventoryBookIoExceptionThrowingStub(
                 temporaryFolder.resolve("ioExceptionInventoryBook.json"));
+        JsonDeliveryBookStorage deliveryBookStorage =
+                new JsonDeliveryBookStorage(temporaryFolder.resolve("deliveryBook.json"));
         JsonUserPrefsStorage userPrefsStorage =
                 new JsonUserPrefsStorage(temporaryFolder.resolve("ioExceptionUserPrefs.json"));
-        StorageManager storage = new StorageManager(inventoryBookStorage, userPrefsStorage);
-        logic = new LogicManager(model, storage);
+        StorageManager storage = new StorageManager(inventoryBookStorage, deliveryBookStorage, userPrefsStorage);
+        logic = new LogicManager(inventoryModel, deliveryModel, storage);
 
         // Execute add command
-        String addCommand = AddCommand.COMMAND_WORD + NAME_DESC_CHICKEN + QUANTITY_DESC_CHICKEN
+        String addCommand = ItemAddCommand.COMMAND_WORD + NAME_DESC_CHICKEN + QUANTITY_DESC_CHICKEN
                 + SUPPLIER_DESC_CHICKEN + MAX_QUANTITY_DESC + METRIC_DESC_CHICKEN;
         Item expectedItem = new ItemBuilder(CHICKEN_MANUAL)
                 .withTags()
                 .withMaxQuantity(VALID_MAX_QUANTITY)
                 .withMetric(VALID_METRIC).build();
-        ModelManager expectedModel = new ModelManager();
+        InventoryModelManager expectedModel = new InventoryModelManager();
         expectedModel.addItem(expectedItem);
         String expectedMessage = LogicManager.FILE_OPS_ERROR_MESSAGE + DUMMY_IO_EXCEPTION;
         assertCommandFailure(addCommand, CommandException.class, expectedMessage, expectedModel);
@@ -97,7 +105,7 @@ public class LogicManagerTest {
 
     @Test
     public void getFilteredItemList_modifyList_throwsUnsupportedOperationException() {
-        assertThrows(UnsupportedOperationException.class, () -> logic.getFilteredItemList().remove(0));
+        assertThrows(UnsupportedOperationException.class, () -> logic.getFilteredAndSortedItemList().remove(0));
     }
 
     /**
@@ -105,18 +113,18 @@ public class LogicManagerTest {
      * - no exceptions are thrown <br>
      * - the feedback message is equal to {@code expectedMessage} <br>
      * - the internal model manager state is the same as that in {@code expectedModel} <br>
-     * @see #assertCommandFailure(String, Class, String, Model)
+     * @see #assertCommandFailure(String, Class, String, InventoryModel)
      */
     private void assertCommandSuccess(String inputCommand, String expectedMessage,
-            Model expectedModel) throws CommandException, ParseException {
+            InventoryModel expectedInventoryModel) throws CommandException, ParseException {
         CommandResult result = logic.execute(inputCommand);
         assertEquals(expectedMessage, result.getFeedbackToUser());
-        assertEquals(expectedModel, model);
+        assertEquals(expectedInventoryModel, inventoryModel);
     }
 
     /**
      * Executes the command, confirms that a ParseException is thrown and that the result message is correct.
-     * @see #assertCommandFailure(String, Class, String, Model)
+     * @see #assertCommandFailure(String, Class, String, InventoryModel)
      */
     private void assertParseException(String inputCommand, String expectedMessage) {
         assertCommandFailure(inputCommand, ParseException.class, expectedMessage);
@@ -124,7 +132,7 @@ public class LogicManagerTest {
 
     /**
      * Executes the command, confirms that a CommandException is thrown and that the result message is correct.
-     * @see #assertCommandFailure(String, Class, String, Model)
+     * @see #assertCommandFailure(String, Class, String, InventoryModel)
      */
     private void assertCommandException(String inputCommand, String expectedMessage) {
         assertCommandFailure(inputCommand, CommandException.class, expectedMessage);
@@ -132,12 +140,13 @@ public class LogicManagerTest {
 
     /**
      * Executes the command, confirms that the exception is thrown and that the result message is correct.
-     * @see #assertCommandFailure(String, Class, String, Model)
+     * @see #assertCommandFailure(String, Class, String, InventoryModel)
      */
     private void assertCommandFailure(String inputCommand, Class<? extends Throwable> expectedException,
             String expectedMessage) {
-        Model expectedModel = new ModelManager(model.getInventoryBook(), new UserPrefs());
-        assertCommandFailure(inputCommand, expectedException, expectedMessage, expectedModel);
+        InventoryModel expectedInventoryModel =
+                new InventoryModelManager(inventoryModel.getInventoryBook(), new UserPrefs());
+        assertCommandFailure(inputCommand, expectedException, expectedMessage, expectedInventoryModel);
     }
 
     /**
@@ -145,12 +154,12 @@ public class LogicManagerTest {
      * - the {@code expectedException} is thrown <br>
      * - the resulting error message is equal to {@code expectedMessage} <br>
      * - the internal model manager state is the same as that in {@code expectedModel} <br>
-     * @see #assertCommandSuccess(String, String, Model)
+     * @see #assertCommandSuccess(String, String, InventoryModel)
      */
     private void assertCommandFailure(String inputCommand, Class<? extends Throwable> expectedException,
-            String expectedMessage, Model expectedModel) {
+            String expectedMessage, InventoryModel expectedInventoryModel) {
         assertThrows(expectedException, expectedMessage, () -> logic.execute(inputCommand));
-        assertEquals(expectedModel, model);
+        assertEquals(expectedInventoryModel, inventoryModel);
     }
 
     /**

@@ -1,0 +1,84 @@
+@startuml
+!include style.puml
+
+box Logic LOGIC_COLOR_T1
+participant ":LogicManager" as LogicManager LOGIC_COLOR
+participant ":OneShelfBookParser" as AddressBookParser LOGIC_COLOR
+participant ":ItemFindCommandParser" as ItemFindCommandParser LOGIC_COLOR
+participant "predicate:SupplierContainsKeywordsPredicate" as SupplierContainsKeywordsPredicate LOGIC_COLOR
+participant "result:ItemFindCommand" as ItemFindCommand LOGIC_COLOR
+participant ":CommandResult" as CommandResult LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant ":Model" as Model MODEL_COLOR
+end box
+
+[-> LogicManager : execute("find-i s/NTUC")
+activate LogicManager
+
+LogicManager -> AddressBookParser : parseCommand("find-i s/NTUC")
+activate AddressBookParser
+
+create ItemFindCommandParser
+AddressBookParser -> ItemFindCommandParser
+activate ItemFindCommandParser
+
+
+ItemFindCommandParser --> AddressBookParser
+deactivate ItemFindCommandParser
+
+AddressBookParser -> ItemFindCommandParser : parse("s/NTUC")
+activate ItemFindCommandParser
+
+ref over ItemFindCommandParser : tokenize arguements
+
+create SupplierContainsKeywordsPredicate
+ItemFindCommandParser -> SupplierContainsKeywordsPredicate : SupplierContainsKeywordsPredicate("NTUC",s/)
+activate SupplierContainsKeywordsPredicate
+
+SupplierContainsKeywordsPredicate --> ItemFindCommandParser : predicate
+deactivate SupplierContainsKeywordsPredicate
+'Hidden arrow to position the destroy marker below the end of the activation bar.
+SupplierContainsKeywordsPredicate -[hidden]-> ItemFindCommandParser
+destroy SupplierContainsKeywordsPredicate
+
+create ItemFindCommand
+ItemFindCommandParser -> ItemFindCommand : ItemFindCommand(predicate)
+activate ItemFindCommand
+
+ItemFindCommand --> ItemFindCommandParser : result
+deactivate ItemFindCommand
+
+ItemFindCommandParser --> AddressBookParser : result
+deactivate ItemFindCommandParser
+'Hidden arrow to position the destroy marker below the end of the activation bar.
+ItemFindCommandParser -[hidden]-> AddressBookParser
+destroy ItemFindCommandParser
+
+AddressBookParser --> LogicManager : result
+deactivate AddressBookParser
+
+LogicManager -> ItemFindCommand : execute()
+activate ItemFindCommand
+
+ItemFindCommand -> Model : updateItemListFilter(predicate)
+activate Model
+
+Model --> ItemFindCommand
+deactivate Model
+
+create CommandResult
+ItemFindCommand -> CommandResult
+activate CommandResult
+
+CommandResult --> ItemFindCommand
+deactivate CommandResult
+
+ItemFindCommand --> LogicManager : result
+deactivate ItemFindCommand
+
+[<--LogicManager
+deactivate LogicManager
+
+@enduml

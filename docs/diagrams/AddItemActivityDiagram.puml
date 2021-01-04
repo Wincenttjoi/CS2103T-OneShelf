@@ -1,0 +1,14 @@
+@startuml
+start
+:User executes AddItemCommand;
+
+'Since the beta syntax does not support placing the condition outside the
+'diamond we place it as the true branch instead.
+
+if () then ([Item exists in InventoryBook])
+    :Adds on quantity;
+else ([else])
+    : Create new item and stores into InventoryBook;
+endif
+stop
+@enduml
